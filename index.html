@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,
+		initial-scale=1.0" />
+    <title>Digital Clock</title>
+    <link rel="stylesheet" href="Assets/style.css">
+ </head>
+<body>
+    <div class="main">
+        <div class="container">   
+            <h1 id="head">Digital Clock & Timer</h1>         
+            <div class="clock">                
+                <span id="hrs">00</span>
+                <span>:</span>
+                <span id="min">00</span>
+                <span>:</span>
+                <span id="sec">00</span>    
+            </div>
+                <div class="timer-display">
+                    00 : 00 : 00 : 000
+                </div>
+                    <div class="buttons">
+                        <button id="start_timer">Start</button>
+                        <button id="stop_timer">Stop</button>
+                        <button id="reset_timer">Reset</button>
+                    </div>
+                
+            </div>
+        </div>  
+    </div>
+<script>
+    let hrs = document.getElementById('hrs');
+    let min = document.getElementById('min');
+    let sec = document.getElementById('sec');
+    let [milliseconds, seconds, minutes, hours] = [0, 0, 0, 0];
+    let timeRef = document.querySelector(".timer-display");
+    let int = null;
+    let timerId;
+    setInterval(()=>{
+        let currentTime =new Date();
+        hrs.innerHTML = (currentTime.getHours()<10?"0":"")+currentTime.getHours();
+        min.innerHTML = (currentTime.getMinutes()<10?"0":"")+currentTime.getMinutes();
+        sec.innerHTML = (currentTime.getSeconds()<10?"0":"")+currentTime.getSeconds();
+},1000)
+
+
+document.getElementById("start_timer").addEventListener("click", () => {
+    if(int !== null) {
+        clearInterval(int);
+    }
+    int = setInterval(displayTimer, 10);
+});
+
+document.getElementById("stop_timer").addEventListener("click", () => {
+    clearInterval(int);
+});
+
+document.getElementById("reset_timer").addEventListener("click", () => {
+    clearInterval(int);
+    [milliseconds, seconds, minutes, hours] = [0, 0, 0, 0];
+    timeRef.innerHTML = "00 : 00 : 00 : 000 ";
+}); 
+
+function displayTimer() {
+    milliseconds += 10;
+    if(milliseconds == 1000) {
+        milliseconds = 0;
+        seconds++;
+        if(seconds == 60) {
+            seconds = 0;
+            minutes++;
+            if(minutes == 60) {
+                minutes = 0;
+                hours++;
+            }
+        }
+    }
+
+    let h = hours < 10 ? "0" + hours : hours;
+    let m = minutes < 10 ? "0" + minutes : minutes;
+    let s = seconds < 10 ? "0" + seconds : seconds;
+    let ms = 
+        milliseconds < 10
+        ? "00" + milliseconds
+        : milliseconds < 100
+        ? "0" + milliseconds
+        : milliseconds;
+
+    timeRef.innerHTML = `${h} : ${m} : ${s} : ${ms}`;
+
+}
+</script>
+</body>
+
+</html>
